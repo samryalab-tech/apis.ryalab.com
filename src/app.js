@@ -6,10 +6,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 🔥 TEST ROUTE (IMPORTANTE)
+app.get('/', (req, res) => {
+  res.send('API ERP funcionando 🚀');
+});
+
 // Rutas
 app.use('/erp', require('./routes/erp.routes'));
 
-// 🔥 IMPORTANTE PARA HOSTING
+// 🔥 PUERTO DINÁMICO
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
