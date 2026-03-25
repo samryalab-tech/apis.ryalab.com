@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 });
 
 // Rutas
-app.use('/erp', require('./src/routes/erp.routes'));
+app.use('/erp', require('./routes/erp.routes'));
 
 const PORT = process.env.PORT || 3000;
 
