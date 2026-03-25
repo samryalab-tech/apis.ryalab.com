@@ -9,6 +9,9 @@ app.use(express.json());
 // Rutas
 app.use('/erp', require('./routes/erp.routes'));
 
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
+// 🔥 IMPORTANTE PARA HOSTING
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
