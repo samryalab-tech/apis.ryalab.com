@@ -11,6 +11,10 @@ app.get('/', (req, res) => {
   res.send('API ERP funcionando 🚀');
 });
 
+// 🔥 KEEP ALIVE (IMPORTANTE PARA HOSTINGER)
+setInterval(() => {
+  console.log('Servidor activo...');
+}, 10000);
 // Rutas
 app.use('/erp', require('./routes/erp.routes'));
 
