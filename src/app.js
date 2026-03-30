@@ -3,8 +3,15 @@ const cors = require('cors');
 
 const app = express();
 
+// =======================
+// MIDDLEWARES
+// =======================
 app.use(cors());
 app.use(express.json());
+
+// =======================
+// RUTAS BASE
+// =======================
 
 // 🔥 TEST BASE
 app.get('/', (req, res) => {
@@ -17,11 +24,12 @@ app.get('/api/test', (req, res) => {
 });
 
 // =======================
-// DEBUG DE RUTAS
+// CARGA DE RUTAS
 // =======================
 
 console.log('Cargando rutas...');
 
+// ERP
 try {
   const erpRoutes = require('./routes/erp.routes');
   console.log('✔ erp.routes cargado');
@@ -30,6 +38,7 @@ try {
   console.error('❌ Error cargando erp.routes:', err.message);
 }
 
+// EMPRESAS
 try {
   const empresaRoutes = require('./routes/empresa.routes');
   console.log('✔ empresa.routes cargado');
@@ -38,6 +47,7 @@ try {
   console.error('❌ Error cargando empresa.routes:', err.message);
 }
 
+// USUARIOS
 try {
   const usuarioRoutes = require('./routes/usuario.routes');
   console.log('✔ usuario.routes cargado');
@@ -47,13 +57,26 @@ try {
 }
 
 // =======================
-// TEST DIRECTO (para aislar problema)
+// RUTA DEBUG DIRECTA
 // =======================
 
 app.get('/api/empresas/test', (req, res) => {
   res.json({ mensaje: 'Ruta empresas directa OK' });
 });
 
+// =======================
+// 404 HANDLER (IMPORTANTE)
+// =======================
+
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Ruta no encontrada',
+    url: req.originalUrl
+  });
+});
+
+// =======================
+// SERVER
 // =======================
 
 const PORT = process.env.PORT || 3000;
