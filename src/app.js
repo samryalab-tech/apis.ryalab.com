@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-// ⚠️ dotenv opcional (no rompe si no hay .env)
 require('dotenv').config();
 
 app.use(express.json());
@@ -17,11 +16,20 @@ app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
+// =======================
 // ROUTES
+// =======================
+
 const empresaRoutes = require('./routes/empresa.routes');
 app.use('/api/empresas', empresaRoutes);
 
+// 🔥 ESTA FALTABA
+const usuarioRoutes = require('./routes/usuario.routes');
+app.use('/api/usuarios', usuarioRoutes);
+
+// =======================
 // 404
+// =======================
 app.use((req, res) => {
   res.status(404).json({
     error: 'Ruta no encontrada',
@@ -29,7 +37,7 @@ app.use((req, res) => {
   });
 });
 
-// SERVER
+// =======================
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
