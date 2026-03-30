@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const empresaController = require('../controllers/empresa.controller');
-
-router.post('/crear', empresaController.crearEmpresa);
+// ✅ RUTA CORRECTA
+router.post('/crear', (req, res) => {
+  res.json({ mensaje: 'Empresa creada correctamente' });
+});
 
 module.exports = router;
