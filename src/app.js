@@ -1,8 +1,21 @@
 const express = require('express');
-const app = express();
-
+const cors = require('cors');
 require('dotenv').config();
 
+const app = express();
+
+// =======================
+// CORS (CRÍTICO)
+// =======================
+app.use(cors({
+  origin: ['http://localhost:4200'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
+
+// =======================
+// MIDDLEWARES
+// =======================
 app.use(express.json());
 
 // LOG GLOBAL
@@ -11,21 +24,23 @@ app.use((req, res, next) => {
   next();
 });
 
-// TEST BASE
+// =======================
+// TEST
+// =======================
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
 
 // =======================
-// ROUTES
+// ROUTES BASE ERP
 // =======================
 
 const empresaRoutes = require('./routes/empresa.routes');
-app.use('/api/empresas', empresaRoutes);
-
-// 🔥 ESTA FALTABA
 const usuarioRoutes = require('./routes/usuario.routes');
-app.use('/api/usuarios', usuarioRoutes);
+
+// 🔥 IMPORTANTE: USAR MISMO PREFIJO QUE FRONTEND
+app.use('/erp/empresas', empresaRoutes);
+app.use('/erp/usuarios', usuarioRoutes);
 
 // =======================
 // 404
