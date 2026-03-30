@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 router.post('/crear', (req, res) => {
+  console.log('🔥 POST /crear recibido');
   res.json({ mensaje: 'Empresa creada correctamente' });
 });
 
