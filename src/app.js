@@ -18,6 +18,9 @@ app.use('/api/usuarios', require('./routes/usuario.routes'));
 
 const PORT = process.env.PORT || 3000;
 
+app.get('/api/test', (req, res) => {
+  res.json({ ok: true });
+});
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
