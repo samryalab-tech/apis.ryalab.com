@@ -3,7 +3,6 @@ const router = express.Router();
 
 const empresaController = require('../controllers/empresa.controller');
 
-// 🏢 Crear empresa
 router.post('/crear', empresaController.crearEmpresa);
 
 module.exports = router;
