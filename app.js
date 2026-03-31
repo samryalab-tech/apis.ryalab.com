@@ -7,22 +7,23 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
-app.use(express.json()); // <--- ESTO ES VITAL PARA QUE POSTMAN FUNCIONE
+app.use(express.json());
 
-// CONFIG DE TU DB (Hostinger)
+// CONFIG DE DB (Usa las variables que configuraste en el panel de Hostinger)
 const dbConfig = {
-    host: process.env.DB_HOST,
+    host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT || 3306
+    port: 3306
 };
 
-// --- RUTA DIRECTA ---
+// RUTA RAIZ (Para probar si el dominio ya apunta al Node)
+app.get('/', (req, res) => res.send("✅ API de Maquind en Hostinger Funcionando"));
+
+// RUTA LOGIN
 app.post('/login', async (req, res) => {
     const { correo, password } = req.body;
-    console.log("Intentando login con:", correo); // Esto saldrá en tu terminal de Mac
-
     try {
         const connection = await mysql.createConnection(dbConfig);
         const [rows] = await connection.execute('SELECT * FROM usuarios WHERE correo = ?', [correo]);
@@ -31,17 +32,15 @@ app.post('/login', async (req, res) => {
         if (rows.length === 0) return res.status(401).json({ error: "Usuario no existe" });
 
         const valid = await bcrypt.compare(password, rows[0].password);
-        if (!valid) return res.status(401).json({ error: "Contraseña mal" });
+        if (!valid) return res.status(401).json({ error: "Contraseña incorrecta" });
 
-        const token = jwt.sign({ id: rows[0].id, rol: rows[0].rol }, 'maquind_2026', { expiresIn: '24h' });
-        
+        const token = jwt.sign({ id: rows[0].id }, 'maquind2026', { expiresIn: '24h' });
         res.json({ success: true, token, user: rows[0].nombre });
     } catch (e) {
-        res.status(500).json({ error: "Error de DB: " + e.message });
+        res.status(500).json({ error: "Error de DB en Hostinger: " + e.message });
     }
 });
 
-// --- RUTA DE PRUEBA (Para ver si el puerto sirve) ---
-app.get('/', (req, res) => res.send("Servidor Maquind Vivo"));
-
-app.listen(3000, () => console.log("🚀 BACKEND CORRIENDO EN PUERTO 3000"));
+// IMPORTANTE: Hostinger usa process.env.PORT
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
